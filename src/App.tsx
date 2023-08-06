@@ -9,8 +9,8 @@ const App = () => {
     <div className={styles.root}>
       <div className={styles.wrapper}>
         <Header />
-        <TaskForm />
         <TaskList />
+        <TaskForm />
       </div>
     </div>
   );
