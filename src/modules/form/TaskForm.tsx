@@ -8,7 +8,7 @@ import {
   editTask,
   handleModalOpen,
   selectSelectedTask,
-} from "../taskSlice";
+} from "../../features/task/taskSlice";
 
 type Inputs = {
   taskTitle: string;
@@ -16,12 +16,14 @@ type Inputs = {
 
 type PropTypes = {
   edit?: boolean;
+  task: { id: number; title: string; completed: boolean };
 };
 
-const TaskForm: React.FC<PropTypes> = ({ edit }) => {
+const TaskForm: React.FC<PropTypes> = ({ task }) => {
   const dispatch = useDispatch();
   const selectedTask = useSelector(selectSelectedTask);
   const { register, handleSubmit, reset } = useForm<Inputs>();
+
   const handleCreate = (data: Inputs) => {
     dispatch(createTask(data.taskTitle));
     reset();
@@ -36,13 +38,13 @@ const TaskForm: React.FC<PropTypes> = ({ edit }) => {
   return (
     <div className={styles.root}>
       <form
-        onSubmit={edit ? handleSubmit(handleEdit) : handleSubmit(handleCreate)}
+        onSubmit={task ? handleSubmit(handleEdit) : handleSubmit(handleCreate)}
         className={styles.form}
       >
         <TextField
           id="outlined-basic"
-          label={edit ? "Edit Task" : "New Task"}
-          defaultValue={edit ? selectedTask.title : null}
+          label={task ? "Edit Task" : "New Task"}
+          defaultValue={task ? selectedTask.title : null}
           variant="outlined"
           {...register("taskTitle")}
           className={styles.textField}

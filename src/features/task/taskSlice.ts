@@ -10,6 +10,7 @@ interface TaskState {
   selectedTask: { id: number; title: string; completed: boolean };
   //Modalを開ける/閉じる
   isModalOpen: boolean;
+  mode: "edit" | "add" | null;
 }
 
 const initialState: TaskState = {
@@ -17,6 +18,7 @@ const initialState: TaskState = {
   tasks: [{ id: 1, title: "taskA", completed: false }],
   selectedTask: { id: 0, title: "", completed: false },
   isModalOpen: false,
+  mode: null,
 };
 
 export const taskSlice = createSlice({
@@ -61,6 +63,9 @@ export const taskSlice = createSlice({
       //taskを削除した上で、tasksを新規作成
       state.tasks = state.tasks.filter((t) => t.id !== action.payload.id);
     },
+    switchMode: (state, action) => {
+      state.mode = action.payload;
+    },
   },
 });
 
@@ -71,6 +76,7 @@ export const {
   handleModalOpen,
   completeTask,
   deleteTask,
+  switchMode,
 } = taskSlice.actions;
 
 export const selectTasks = (state: RootState): TaskState["tasks"] =>
@@ -82,5 +88,8 @@ export const selectIsModalOpen = (state: RootState): TaskState["isModalOpen"] =>
 export const selectSelectedTask = (
   state: RootState
 ): TaskState["selectedTask"] => state.task.selectedTask;
+
+export const selectMode = (state: RootState): TaskState["mode"] =>
+  state.task.mode;
 
 export default taskSlice.reducer;
