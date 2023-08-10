@@ -7,12 +7,25 @@
   padding: 10px 20px;
   margin-bottom: 10px;
 
+  &.completed {
+    background-color: #d3d3d3;
+  }
+
   .title {
     display: flex;
     align-items: center;
 
     .title_text {
       margin-left: 10px;
+
+      &.completed {
+        text-decoration: line-through;
+      }
+    }
+    .estimated_time,
+    .category,
+    .assigned_date {
+      padding-left: 10px;
     }
   }
 
@@ -20,6 +33,7 @@
     display: flex;
     align-items: center;
 
+    .calendar_button,
     .edit_button,
     .delete_button {
       border: none;
@@ -33,6 +47,7 @@
       }
     }
 
+    .calendar_button,
     .edit_button {
       margin-right: 5px;
     }

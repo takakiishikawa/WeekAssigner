@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTasks, handleModalOpen, switchMode } from "../taskSlice";
 import styles from "./TaskList.module.scss";
 import TaskItem from "../taskItem/TaskItem";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+//import { filterTasks } from "../taskSlice";
+import TaskFilter from "../taskFilter/TaskFilter";
 
 const TaskList = () => {
-  const tasks = useSelector(selectTasks);
+  const filteredTasks = useSelector(selectTasks);
   const dispatch = useDispatch();
 
   const handleOpen = () => {
@@ -14,10 +16,18 @@ const TaskList = () => {
     dispatch(switchMode("add"));
   };
 
+  /*　後で実装する
+  useEffect(() => {
+    const today = new Date().getDay();
+    dispatch(filterTasks(today));
+  }, [dispatch]);
+  */
+
   return (
     <div>
       <div className={styles.root}>
-        {tasks.map((task) => (
+        <TaskFilter />
+        {filteredTasks.map((task) => (
           <TaskItem key={task.id} task={task} />
         ))}
       </div>

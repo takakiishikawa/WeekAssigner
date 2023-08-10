@@ -3,6 +3,7 @@ import Modal from "@mui/material/Modal";
 import styles from "./TaskModal.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import TaskForm from "../form/TaskForm";
+import OnlycalendarForm from "../form/OnlyCalendarForm";
 import {
   selectIsModalOpen,
   handleModalOpen,
@@ -18,13 +19,23 @@ const TaskModal = () => {
     dispatch(handleModalOpen(false));
   };
 
+  const modeLabels = {
+    add: "Add",
+    edit: "Edit",
+    calendar: "calendar",
+  };
+
   return (
     <Modal open={isModalOpen} onClose={handleClose} className={styles.modal}>
       <div className={styles.modal_content}>
         <div className={styles.modal_title}>
-          {isMode === "add" ? "Add" : "Edit"}
+          {isMode ? modeLabels[isMode] : null}
         </div>
-        <TaskForm isMode={isMode} />
+        {isMode === "calendar" ? (
+          <OnlycalendarForm />
+        ) : (
+          <TaskForm isMode={isMode} />
+        )}
       </div>
     </Modal>
   );
