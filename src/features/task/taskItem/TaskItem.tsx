@@ -9,19 +9,19 @@ import {
   handleModalOpen,
   completeTask,
   deleteTask,
-  selectMode,
+  switchMode,
 } from "../taskSlice";
 import TaskModal from "../../../modules/modal/TaskModal";
 
-interface PropTypes {
+interface taskItemProps {
   task: { id: number; title: string; completed: boolean };
 }
 
-const TaskItem = ({ task }: PropTypes) => {
+const TaskItem = ({ task }: taskItemProps) => {
   const dispatch = useDispatch();
   const handleOpen = () => {
     dispatch(selectTask(task));
-    dispatch(selectMode("edit"));
+    dispatch(switchMode("edit"));
     dispatch(handleModalOpen(true));
   };
 
@@ -46,7 +46,7 @@ const TaskItem = ({ task }: PropTypes) => {
           <DeleteIcon className={styles.icon} />
         </button>
       </div>
-      <TaskModal task={task} />
+      <TaskModal />
     </div>
   );
 };

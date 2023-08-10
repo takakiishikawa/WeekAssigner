@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
 import styles from "./TaskForm.module.scss";
 import TextField from "@mui/material/TextField";
 import {
@@ -10,58 +9,64 @@ import {
   selectSelectedTask,
 } from "../../features/task/taskSlice";
 
-type Inputs = {
-  taskTitle: string;
+type taskFormProps = {
+  isMode: "add" | "edit" | null;
 };
 
-type PropTypes = {
-  edit?: boolean;
-  task: { id: number; title: string; completed: boolean };
-};
-
-const TaskForm: React.FC<PropTypes> = ({ task }) => {
+const TaskForm: React.FC<taskFormProps> = ({ isMode }) => {
   const dispatch = useDispatch();
   const selectedTask = useSelector(selectSelectedTask);
-  const { register, handleSubmit, reset } = useForm<Inputs>();
 
-  const handleCreate = (data: Inputs) => {
-    dispatch(createTask(data.taskTitle));
-    reset();
+  const [formData, setFormData] = useState({
+    id: selectedTask.id,
+    title: selectedTask.title,
+  });
+
+  console.log(formData);
+
+  const handleChangeForm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleEdit = (data: Inputs) => {
-    const sendData = { ...selectedTask, title: data.taskTitle };
-    dispatch(editTask(sendData));
+  const handleAdd = () => {
+    dispatch(createTask(formData.title));
+    dispatch(handleModalOpen(false));
+  };
+
+  const handleEdit = () => {
+    dispatch(editTask(formData));
     dispatch(handleModalOpen(false));
   };
 
   return (
     <div className={styles.root}>
-      <form
-        onSubmit={task ? handleSubmit(handleEdit) : handleSubmit(handleCreate)}
-        className={styles.form}
-      >
-        <TextField
-          id="outlined-basic"
-          label={task ? "Edit Task" : "New Task"}
-          defaultValue={task ? selectedTask.title : null}
-          variant="outlined"
-          {...register("taskTitle")}
-          className={styles.textField}
-        />
-        <div className={styles.button_wrapper}>
-          <button type="submit" className={styles.submit_button}>
-            Submit
-          </button>
-          <button
-            type="button"
-            onClick={() => dispatch(handleModalOpen(false))}
-            className={styles.cancel_button}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+      <TextField
+        id="outlined-basic"
+        name="title"
+        label={isMode === "add" ? "New Task" : "Edit Task"}
+        defaultValue={isMode === "add" ? null : selectedTask.title}
+        variant="outlined"
+        onChange={handleChangeForm}
+        className={styles.textField}
+      />
+      <div className={styles.button_wrapper}>
+        <button
+          className={styles.submit_button}
+          onClick={isMode === "add" ? handleAdd : handleEdit}
+        >
+          Submit
+        </button>
+        <button
+          onClick={() => dispatch(handleModalOpen(false))}
+          className={styles.cancel_button}
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };

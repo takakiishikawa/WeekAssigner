@@ -2,3 +2,21 @@
   overflow: hidden;
   overflow-y: auto;
 }
+.buttonWrapper {
+  display: flex;
+  justify-content: center; // 水平方向の中央揃え
+  padding: 20px 0; // 必要に応じてパディングを調整
+
+  .add_button {
+    border: none;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+    cursor: pointer;
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      color: #f76c60;
+    }
+  }
+}

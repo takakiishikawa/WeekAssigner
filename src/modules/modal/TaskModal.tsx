@@ -6,15 +6,13 @@ import TaskForm from "../form/TaskForm";
 import {
   selectIsModalOpen,
   handleModalOpen,
+  selectMode,
 } from "../../features/task/taskSlice";
 
-interface PropTypes {
-  task: { id: number; title: string; completed: boolean };
-}
-
-const TaskModal: React.FC<PropTypes> = ({ task }) => {
+const TaskModal = () => {
   const dispatch = useDispatch();
   const isModalOpen = useSelector(selectIsModalOpen);
+  const isMode = useSelector(selectMode);
 
   const handleClose = () => {
     dispatch(handleModalOpen(false));
@@ -23,8 +21,10 @@ const TaskModal: React.FC<PropTypes> = ({ task }) => {
   return (
     <Modal open={isModalOpen} onClose={handleClose} className={styles.modal}>
       <div className={styles.modal_content}>
-        <div className={styles.modal_title}>{task ? "Edit" : "Add"}</div>
-        <TaskForm task={task} />
+        <div className={styles.modal_title}>
+          {isMode === "add" ? "Add" : "Edit"}
+        </div>
+        <TaskForm isMode={isMode} />
       </div>
     </Modal>
   );
